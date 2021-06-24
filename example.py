@@ -3,15 +3,16 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
 from FastK import FastK
 
+
 def main():
     # Create dataset
     df = make_blobs(n_samples=100, centers=4, n_features=2,
                     cluster_std=0.6, random_state=50)[0]
 
     # Cluster (and measure the time taken)
-    fastk = FastK()
+    fastk = FastK(n_clusters=4)
     start_t = time.time()
-    fastk.fit(df, n_clusters=4)
+    fastk.fit(df)
     end_t = time.time()
 
     # Output time taken and scatter plot

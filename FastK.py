@@ -6,13 +6,32 @@ from functools import reduce
 class FastK:
     """FastK K-Medoids algorithm implementation in Python"""
 
-    def __init__(self):
+    def __init__(self, n_clusters : int = 8):
+        """Constructor method for FastK
+
+        parameters
+        ----------
+        n_clusters : int
+            number of seeds to be placed and, consequently, the number of
+            clusters to be formed
+        """
+        self.n_clusters_ = n_clusters
         self.labels_  = None
         self.medoids_ = None
         self.dist_    = None
         self.v_       = None
 
-    def fit(self, df : Union[pd.DataFrame, np.ndarray], n_clusters : int = 8):
+    def fit(self, df : Union[pd.DataFrame, np.ndarray]):
+        """Fit the dataset to get the labels, medoids and distances
+
+        parameters
+        ----------
+        df : Union[pd.DataFrame, np.ndarray]
+            dataset to cluster. Although it's recommended that it's either a
+            numpy.ndarray or pandas.DataFrame, anything castable to
+            numpy.array should work correctly if it has the correct dimensions
+            (2x2) and data types (numerical values)
+        """
         if type(df) == np.ndarray: D = df
         else:                      D = np.array(df)
         n_elems = D.shape[0]
@@ -33,7 +52,7 @@ class FastK:
             self.v_[j] = j_sum
 
         # Step 3. Medoids = indices for the n_clusters smallest values in v
-        self.medoids_ = np.argsort(self.v_)[:n_clusters]
+        self.medoids_ = np.argsort(self.v_)[:self.n_clusters_]
 
         # Step 4. Assign each object to the nearest medoid
         self.labels_ = np.zeros(n_elems)
